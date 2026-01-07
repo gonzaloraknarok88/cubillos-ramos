@@ -1,10 +1,65 @@
-export default function App() {
+
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Menu, X, Instagram, Facebook, Linkedin, MessageCircle, ChevronUp } from 'lucide-react';
+import Header from './components/Header';
+import Hero from './components/Hero';
+import Services from './components/Services';
+import About from './components/About';
+import Team from './components/Team';
+import Contact from './components/Contact';
+import Footer from './components/Footer';
+import WhatsAppButton from './components/WhatsAppButton';
+
+const App: React.FC = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+      setShowScrollTop(window.scrollY > 500);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
-    <div style={{ width: '100%', height: '100vh', background: '#1a1a1a', color: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontFamily: 'sans-serif' }}>
-      <h1 style={{ fontSize: '3rem', marginBottom: '1rem', color: '#ff6b6b' }}>Cubillos & Ramos</h1>
-      <p style={{ fontSize: '1.2rem', marginBottom: '2rem', color: '#aaa' }}>Abogados Especializados</p>
-      <a href="https://wa.me/56999235381" target="_blank" rel="noopener noreferrer" style={{ background: '#25D366', color: 'white', padding: '12px 24px', borderRadius: '8px', textDecoration: 'none', fontSize: '1.1rem', fontWeight: 'bold' }}>📱 Contactar por WhatsApp</a>
-      <a href="https://wa.me/56999235381" target="_blank" rel="noopener noreferrer" style={{ position: 'fixed', bottom: '24px', right: '24px', width: '60px', height: '60px', background: '#25D366', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', zIndex: 50, boxShadow: '0 4px 12px rgba(37,211,102,0.4)', textDecoration: 'none' }}>💬</a>
+    <div className="relative overflow-x-hidden selection:bg-brand-gold selection:text-brand-deep">
+      <Header isScrolled={isScrolled} />
+      
+      <main>
+        <Hero />
+        <Services />
+        <About />
+        <Team />
+        <Contact />
+      </main>
+
+      <Footer />
+      
+      <WhatsAppButton />
+
+      <AnimatePresence>
+        {showScrollTop && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.5 }}
+            onClick={scrollToTop}
+            className="fixed bottom-24 right-6 z-40 bg-brand-deep text-brand-gold p-3 rounded-full shadow-lg border border-brand-gold/30 transition-transform hover:scale-110 active:scale-95"
+            aria-label="Subir al inicio"
+          >
+            <ChevronUp size={24} />
+          </motion.button>
+        )}
+      </AnimatePresence>
     </div>
   );
-}
+};
+
+export default App;
